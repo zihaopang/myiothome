@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>关注列表</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<header th:replace="index::header">
+</header>
+
+<body style="background:#eee">
+<div class="container" style="width:70%;background:white">
+    <ul class="nav nav-tabs" style="padding-top:10px">
+        <li role="presentation" class="active"><a th:href="@{|/focusList/${user.id}|}"><span th:text="${user.username}">用户一</span>关注的人</a></li>
+        <li role="presentation"><a th:href="@{|/fansList/${user.id}|}" ><span th:text="${user.username}">用户一</span>的粉丝</a></li>
+    </ul>
+    <div class="media-body"  style="padding-top:20px">
+        <ul class="media-list" th:each="item:${list}">
+            <li class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;" th:src="${item.user.headerUrl}" alt="头像">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div >
+                        <a href="#" class="media-heading" th:text="${item.user.username}" style="font-size:20px;padding-left:30px">用户二</a>
+
+                        <span th:text="${#dates.format(item.time,'yyyy-MM-dd HH:mm:ss')}"
+                              style="font-size:13px;color:gray;float:right">关注于&nbsp;&nbsp;<span>2019-3-12 12:30:12</span></span>
+                    </div>
+                    <div class="row">
+                        <div style="margin-right:20px;margin-top:10px;display: inline-block;float:right">
+                            <input type="hidden" th:value="${item.user.id}">
+                            <button id="focusBtn" th:text="|${item.checkFocus==0?'关注TA':'取消关注'}|"
+                                    th:class="|btn ${item.checkFocus==0?'btn-primary':'btn-danger'} btn-sm|">关注TA</button>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/global.js}"></script>
+<script type="text/javascript" th:src="@{/js/focus.js}"></script>
+</body>
+</html>

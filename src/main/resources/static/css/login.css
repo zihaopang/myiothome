@@ -1,0 +1,10 @@
+.form{
+    width:500px;
+    margin:0 auto;
+}
+
+.invalid{
+color:red;
+font-size:12px;
+padding:0px 0px 0px 0px;
+}

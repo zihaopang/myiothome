@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myiothome.dao.EventMapper">
+    <sql id="selectFields">
+        id,topic,user_id,entity_type,entity_id,entity_user_id,create_time,status
+    </sql>
+
+    <sql id="insertFields">
+        topic,user_id,entity_type,entity_id,entity_user_id,create_time,status
+    </sql>
+
+    <insert id="insertEvent">
+        insert into notice(<include refid="insertFields"></include>)
+        values(#{topic},#{userId},#{entityType},#{entityId},#{entityUserId},#{createTime},#{status})
+    </insert>
+
+    <select id="selectLatestEvent" resultType="Event">
+        select <include refid="selectFields"></include>
+        from notice
+        where id in(
+            select max(id)
+            from notice
+            where topic=#{topic}
+            and entity_user_id=#{entityUserId}
+        )
+    </select>
+
+    <select id="selectUnreadNum" resultType="int">
+        select count(id)
+        from notice
+        where topic=#{topic}
+        and entity_user_id=#{entityUserId}
+        and status=0
+    </select>
+
+    <select id="selectEvents" resultType="Event">
+        select <include refid="selectFields"></include>
+        from notice
+        where topic=#{topic}
+        and entity_user_id=#{entityUserId}
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="selectTopicNum" resultType="int">
+        select count(id)
+        from notice
+        where topic=#{topic}
+        and entity_user_id=#{entityUserId}
+    </select>
+
+    <update id="updateEventStatus">
+        update notice
+        set status=#{status}
+        where id=#{id}
+    </update>
+
+</mapper>

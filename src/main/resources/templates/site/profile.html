@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人主页</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<header th:replace="index::header">
+</header>
+<body style="background:#eee">
+
+    <div class="container" style="width:60%;background:white">
+        <ul class="nav nav-tabs" style="padding-top:10px">
+            <li role="presentation" class="active"><a href="#">个人信息</a></li>
+            <li role="presentation"><a href="#">我的帖子</a></li>
+            <li role="presentation"><a href="#">我的回复</a></li>
+        </ul>
+
+        <div class="media-body"  style="padding-top:40px;padding-bottom:40px">
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;margin-top:5px" th:src="${user.headerUrl}" alt="头像">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div style="margin-left:20px">
+                        <b th:text="${user.username}">用户一</b>
+                        <input type="hidden"  th:value="${user.id}">
+                        <button id="focusBtn" th:class="|btn ${checkFocus==0?'btn-primary':'btn-danger'} btn-sm|"
+                                th:text="|${checkFocus==0?'关注TA':'取消关注'}|"
+                                th:if="${loginUser!=null&&loginUser.id!=user.id}" style="float:right">关注TA</button>
+                    </div>
+                    <div style="margin-top:15px;margin-left:20px">
+                        <span style="font-size:13px;color:gray;">注册于:</span>
+                        <span style="font-size:13px;color:gray;" th:text="${#dates.format(user.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-2-3 12:30:23</span>
+                    </div>
+                    <div style="margin-top:15px;margin-left:20px">
+                        <span style="font-size:13px;color:gray;">关注了</span>
+                        <a th:href="@{|/focusList/${user.id}|}"><span id="focusNum" th:text="${focusNum}" style="font-size:13px;color:blue;">5</span></a>
+                        <span style="font-size:13px;color:gray;">人</span>&nbsp;&nbsp;&nbsp;
+                        <span style="font-size:13px;color:gray;">关注者</span>
+                        <a th:href="@{|/fansList/${user.id}|}"><span id="fansNum" th:text="${entityFansNum}" style="font-size:13px;color:blue;">5</span></a>
+                        <span style="font-size:13px;color:gray;">人</span>&nbsp;&nbsp;&nbsp;
+                        <span style="font-size:13px;color:gray;">获得了</span>
+                        <span style="font-size:13px;color:red;" th:text="${likeNum}">5</span>
+                        <span style="font-size:13px;color:gray;">个赞</span>&nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/global.js}"></script>
+    <script type="text/javascript" th:src="@{/js/focus.js}"></script>
+</body>
+</html>

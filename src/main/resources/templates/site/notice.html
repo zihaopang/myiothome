@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>系统通知</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body style="background:#eee">
+<header th:replace="index::header">
+</header>
+
+<div class="container" style="background:white;width:80%">
+    <ul class="nav nav-tabs" style="padding-top:10px">
+        <li role="presentation"><a th:href="@{/message/list}">朋友私信
+            <span class="badge badge-danger" style="background:#B22222" th:if="${allNum!=0}" th:text="${allNum}">12</span>
+        </a></li>
+        <li role="presentation" class="active"><a th:href="@{/notice}">系统通知
+            <span class="badge badge-danger" th:if="${result.allUnreadNum!=0}" th:text="${result.allUnreadNum}" style="background:#B22222">12</span>
+        </a></li>
+    </ul>
+
+    <div class="media-body"  style="padding-top:20px">
+        <ul class="media-list" th:if="${result!=null}">
+            <li class="media" th:if="${result.commentEvent!=null}" >
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;margin-top:10px" src="http://static.nowcoder.com/images/head/reply.png" alt="通知图标">
+                        <span class="badge badge-danger" th:if="${result.commentUnreadNum!=0}" th:text="${result.commentUnreadNum}"style="background:#B22222;float:right;margin-top:-60px;margin-right:-5px">12</span>
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div>
+                        <span href="#" class="media-heading" style="font-size:20px;padding-left:15px">评论</span>
+                        <b style="float:right;margin-right:5px;margin-top:8px">2019-2-23 11:23:34</b>
+                    </div>
+                    <div style="margin-left:15px;margin-top:20px">
+                        <a style="font-size:15px;cursor:pointer;;display:inline-block"
+                           th:href="@{|/notice/comment/${result.commentEvent.entityUserId}|}">用户
+                            <span th:text="${result.commentUser.username}">test1</span>
+                            <span th:text="|${result.commentEvent.entityType==1?'评论了':'回复了'}|">评论了</span>
+                            你的<span th:text="|${result.commentEvent.entityType==1?'帖子':'评论'}|">帖子</span>...</a>
+                    </div>
+                </div>
+                <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>
+            </li>
+
+            <li class="media" th:if="${result.likeEvent!=null}" >
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;margin-top:10px" src="http://static.nowcoder.com/images/head/like.png" alt="通知图标">
+                        <span class="badge badge-danger" th:if="${result.likeUnreadNum!=0}" th:text="${result.likeUnreadNum}" style="background:#B22222;float:right;margin-top:-60px;margin-right:-5px">12</span>
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div>
+                        <span href="#" class="media-heading" style="font-size:20px;padding-left:15px">点赞</span>
+                        <b style="float:right;margin-right:5px;margin-top:8px" th:text="${#dates.format(result.likeEvent.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-2-23 11:23:34</b>
+                    </div>
+                    <div style="margin-left:15px;margin-top:20px">
+                        <a style="font-size:15px;cursor:pointer;;display:inline-block"
+                           th:href="@{|/notice/like/${result.likeEvent.entityUserId}|}">用户
+                            <span th:text="${result.likeUser.username}">test1</span>
+                            点赞了你的<span th:text="|${result.likeEvent.entityType==1?'帖子':'评论'}|">帖子</span>...</a>
+                    </div>
+                </div>
+                <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>
+            </li>
+            <li class="media" th:if="${result.focusEvent!=null}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;margin-top:10px" src="http://static.nowcoder.com/images/head/follow.png" alt="通知图标">
+                        <span class="badge badge-danger" th:if="${result.focusUnreadNum!=0}" th:text="${result.focusUnreadNum}"style="background:#B22222;float:right;margin-top:-60px;margin-right:-5px">12</span>
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div>
+                        <span href="#" class="media-heading" style="font-size:20px;padding-left:15px">关注</span>
+                        <b th:text="${#dates.format(result.focusEvent.createTime,'yyyy-MM-dd HH:mm:ss')}" style="float:right;margin-right:5px;margin-top:8px">2019-2-23 11:23:34</b>
+                    </div>
+                    <div style="margin-left:15px;margin-top:20px">
+                        <a th:href="@{|/notice/focus/${result.focusEvent.entityUserId}|}" style="font-size:15px;cursor:pointer;;display:inline-block">用户
+                            <span th:text="${result.focusUser.username}">test1</span>关注了你...</a>
+                    </div>
+                </div>
+                <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>
+            </li>
+        </ul>
+    </div>
+
+<!--    <footer th:replace="index::pagination"></footer>-->
+
+</div>
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/global.js}"></script>
+<script type="text/javascript" th:src="@{/js/message.js}"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>系统通知</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<header th:replace="index::header">
+</header>
+
+<body style="background:#eee center" >
+    <div class="container" style="width:80%;background:white">
+        <div style="margin:20px">
+            <div style="margin-left:-10px">
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                <span style="font-size:20px">系统通知</span>
+            </div>
+        </div>
+
+        <ul class="media-list" th:each="item:${result}">
+            <li class="media" >
+                <div class="media-left" >
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;margin-top:10px" th:src="${item.user.headerUrl}" alt="头像">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b th:text="${item.user.username}" class="panel-title"> 落基山下的闲人</b>
+                            <span th:text="${#dates.format(item.event.createTime,'yyyy-MM-dd HH:mm:ss')}" style="float:right">2019.3.10 12:30:23</span>
+                        </div>
+                        <div class="panel-body">
+                            <span th:if="${item.event.topic=='like'}">
+                                用户<span th:text="${item.user.username}">test1</span>赞了你的
+                                <span th:text="|${item.event.entityType==1?'帖子':'评论'}|">帖子</span>，
+                                <a th:href="@{|/discuss/detail/${item.discussPost.id}|}">点击查看！</a>
+                            </span>
+                            <span th:if="${item.event.topic=='comment'}">
+                                用户<span th:text="${item.user.username}">test1</span>评论了你的
+                                <span th:text="|${item.event.entityType==1?'帖子':'评论'}|">帖子</span>，
+                                <a th:href="@{|/discuss/detail/${item.discussPost.id}|}">点击查看！</a>
+                            </span>
+                            <span th:if="${item.event.topic=='focus'}">
+                                用户<span th:text="${item.user.username}">test1</span>
+                                关注了你，
+                                <a th:href="@{|/profile/${item.user.id}|}">点击查看！</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+<!--                <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>-->
+            </li>
+
+        </ul>
+
+        <footer th:replace="index::pagination"></footer>
+    </div>
+
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/global.js}"></script>
+    <script type="text/javascript" th:src="@{/js/message.js}"></script>
+</body>
+</html>

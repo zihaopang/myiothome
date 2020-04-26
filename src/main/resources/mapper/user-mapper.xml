@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myiothome.dao.UserMapper">
+
+    <sql id="selectFields">
+        id,username,password,email,salt,status,activation_code,
+        header_url,create_time,type
+    </sql>
+
+    <sql id="insertFields">
+        username,password,email,salt,status,activation_code,
+        header_url,create_time,type
+    </sql>
+
+    <select id="selectUserById" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where id=#{id}
+    </select>
+
+    <select id="selectUserByName" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where username=#{userName}
+    </select>
+
+    <select id="selectUserByEmail" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where email=#{email}
+    </select>
+
+    <insert id="insertUser">
+        insert into user(<include refid="insertFields"></include>)
+        values(#{username},#{password},#{email},#{salt},#{status},#{activationCode},
+        #{headerUrl},#{createTime},#{type})
+    </insert>
+    
+    <update id="updateUserStatus">
+        update user set status=#{status} where id = #{id}
+    </update>
+    <update id="updateUserName">
+        update user set username=#{userName} where id = #{id}
+    </update>
+    <update id="updateUserEmail">
+        update user set email=#{email} where id = #{id}
+    </update>
+    <update id="updateUserHeaderUrl">
+        update user set header_url=#{headerUrl} where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>物联之家-首页</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link th:href="@{/css/index.css}">
+    <style>
+        body {
+            background:#eee;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-inverse sticky-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed"
+                            data-toggle="collapse" data-target="#nav"
+                            aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" th:href="@{/index}" >
+                        <img alt="brand" style="max-width:150px;margin-top:-10px;"
+                             src="http://q6k7mor9l.bkt.clouddn.com/myiothome_logo.png">
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="nav">
+                    <ul class="nav navbar-nav col-md-offset-4" style="font-size:18px">
+                        <li><a href="#" style="margin-top:5px;" th:if="${loginUser!=null}">  控制台   </a></li>
+                        <li><a th:href="@{/index}" style="margin-top:5px;" th:if="${loginUser!=null}">  论坛   </a></li>
+                        <!--<li><a data-toggle="modal" data-target="#loginModel" style="margin-top:5px;cursor: pointer;">   登陆   </a></li>-->
+                        <!--<li><a data-toggle="modal" data-target="#registerModel" style="margin-top:5px;cursor: pointer;">   注册   </a></li>-->
+                        <li><a th:href="@{/login}" style="margin-top:5px;cursor: pointer;" th:if="${loginUser==null}">   登陆   </a></li>
+                        <li><a th:href="@{/register}" style="margin-top:5px;cursor: pointer;" th:if="${loginUser==null}">   注册   </a></li>
+                        <li><a th:href="@{/message/list}" style="margin-top:5px;display:inline-block" th:if="${loginUser!=null}">   消息
+                            </a>
+                        </li>
+                        <li class="dropdown" th:if="${loginUser!=null}">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <img th:src="${loginUser.headerUrl}" style="width:30px" class="img-thumbnail">
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{|/profile/${loginUser.id}|}" style="font-size:15px">个人主页</a></li>
+                                <li><a th:href="@{/setting}" style="font-size:15px">账号设置</a></li>
+                                <li><a th:href="@{/logout}" style="font-size:15px">退出登录</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><span th:text="${loginUser.username}" style="font-size:15px;text-align:left;padding-left:20px">用户名</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-right" method="get" th:action="@{/search}">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="" name="keyWords" th:value="${keyWords}">
+                        </div>
+                        <button type="submit" class="btn btn-default">搜索</button>
+                    </form>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </header>
+
+    <!--消息提示框-->
+    <div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hintModalLabel">提示</h5>
+                </div>
+                <div class="modal-body" id="hintBody">
+                    发布完毕!
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" style="background:white;width:80%">
+
+        <ul class="nav nav-tabs" style="padding-top:10px">
+            <li role="presentation" th:class="|${orderMode==0?'active':''}|"><a th:href="@{/index(orderMode=0)}">最新</a></li>
+            <li role="presentation" th:class="|${orderMode==1?'active':''}|"><a th:href="@{/index(orderMode=1)}">最热</a></li>
+        </ul>
+        <button type="button" class="btn btn-primary" style="float:right;margin:-40px 5px 0px 0px"
+                data-toggle="modal" data-target="#publishModal">我要发布</button>
+
+        <!--发帖弹出框-->
+        <div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            新帖发布
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="post-title">标题</label>
+                                <input class="form-control" id="post-title">
+                            </div>
+                            <div class="form-group">
+                                <label for="post-content">内容</label>
+                                <textarea class="form-control" rows="10" id="post-content"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" id="publishBtn" class="btn btn-primary">
+                            发布
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <div class="media-body"  style="padding-top:20px">
+            <ul class="media-list">
+                <li class="media" th:each="item:${posts}">
+                    <div class="media-left">
+                        <a th:href="@{|/profile/${item.user.id}|}">
+                            <img class="media-object img-circle" style="width:50px;height:50px;" th:src="${item.user.headerUrl}" alt="头像">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <div class="row">
+                            <div class="col-md-12 text-left" style="padding-left:30px">
+                                <a th:href="@{|/discuss/detail/${item.post.id}|}"class="media-heading" th:text="${item.post.title}" style="display: inline-block">帖子1的标题</a>
+                                <span class="label label-primary" th:if="${item.post.type==1}" style="font-size:13px">置顶</span>
+                                <span class="label label-danger" th:if="${item.post.status==1}" style="font-size:13px">精华</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="margin-left:30px;margin-top:10px;display: inline-block;float:left">
+                                <b th:text="${item.user.username}" style="font-size:13px;color:gray">牛客扛把子</b>
+                                <span style="font-size:12px;color:gray">&nbsp;发布于&nbsp;</span>
+                                <span th:text="${#dates.format(item.post.createTime,'yyyy-MM-dd HH:mm:ss')}" style="font-size:12px;color:gray">&nbsp;&nbsp;2019-3-12 12:30:12</span>
+                            </div>
+                            <div style="margin-right:20px;margin-top:10px;display: inline-block;float:right">
+                                <span style="font-size:12px;color:gray">赞</span>
+                                &nbsp;<span style="font-size:12px;color:gray" th:text="${item.likeCount}">7</span>&nbsp;&nbsp;
+                                <span style="font-size:12px;color:gray">|&nbsp;&nbsp;&nbsp;回帖</span>
+                                &nbsp;<span th:text="${item.post.commentCount}"style="font-size:12px;color:gray">14</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>
+                </li>
+
+            </ul>
+        </div>
+
+        <footer th:fragment="pagination">
+            <nav th:if="${page.postsNum>0}" aria-label="Page navigation"  style="text-align:center">
+                <ul class="pagination">
+                    <li>
+                        <a th:href="@{${page.path}(current=1)}" aria-label="Previous">
+                            <span aria-hidden="true">首页</span>
+                        </a>
+                    </li>
+                    <li><a th:href="@{${page.path}(current=${page.current-1})}" th:if="${page.current != 1}">上一页</a></li>
+                    <li th:each="i:${#numbers.sequence(page.from,page.to)}" th:class="|${page.current==i?'active':''}|">
+                        <a th:href="@{${page.path}(current=${i})}"
+                           th:text="${i}">1</a>
+                    </li>
+                    <li><a th:href="@{${page.path}(current=${page.current+1})}" th:if="${page.pagesNum!=page.current}">下一页</a></li>
+                    <li>
+                        <a th:href="@{${page.path}(current=${page.pagesNum})}" aria-label="Next">
+                            <span aria-hidden="true">末页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </footer>
+
+    </div>
+
+
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/global.js}"></script>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+</body>
+</html>

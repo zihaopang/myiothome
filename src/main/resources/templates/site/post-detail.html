@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>帖子详情</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="../static/post-detail.css">
+    <style>
+        body {
+            background:#eee;
+        }
+    </style>
+</head>
+<header th:replace="index::header">
+</header>
+<body>
+<div class="container" style="background:white;width:80%">
+    <div class="row">
+        <div style="padding-top:10px;padding-left:20px;display: inline-block;float:left">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+            &nbsp;<h4 th:text="${user.username}" style="display: inline-block">我是管理员</h4>
+        </div>
+        <div style="padding-top:15px;margin-right:10px;display: inline-block;float:right">
+            <input type="hidden" th:value="${discussPost.id}" id="postId">
+            <button type="button" th:disabled="${discussPost.type==1}"
+                    class="btn btn-danger btn-sm" id="topBtn" sec:authorize="hasAnyAuthority('moderator')">置顶</button>
+            <button type="button" th:disabled="${discussPost.status==1}"
+                    class="btn btn-danger btn-sm" id="wonderfulBtn" sec:authorize="hasAnyAuthority('moderator')">加精</button>
+            <button type="button" class="btn btn-danger btn-sm"
+                    id="deleteBtn" sec:authorize="hasAnyAuthority('admin')">删除</button>
+        </div>
+
+    </div>
+    <div class="media">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object img-circle" style="width:50px;height:50px;" th:src="${user.headerUrl}" alt="头像">
+            </a>
+        </div>
+        <div class="media-body">
+            <a href="#">
+                <div class="row">
+                    <div class="col-md-12 text-left" style="padding-left:30px">
+                        <h4 class="media-heading" th:text="${discussPost.title}" style="display: inline-block">帖子的标题</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="padding-left:30px;padding-top:10px;display: inline-block;float:left">
+                        <b th:text="${user.username}" style="font-size:13px;color:gray">牛客扛把子</b>
+                        <span style="font-size:12px;color:gray">&nbsp;发布于&nbsp;</span>
+                        <span th:text="${#dates.format(discussPost.createTime,'yyyy-MM-dd HH:mm:ss')}" style="font-size:12px;color:gray">&nbsp;2019-3-12 12:30:12</span>
+                    </div>
+                    <div style="padding-right:20px;padding-top:10px;display: inline-block;float:right;color:gray">
+                        <a href="javascript:;" th:onclick="|like(this,1,${discussPost.id},${discussPost.userId});|">
+                            <b style="font-size:12px;color:gray" th:text="|${postLikeStatus==1?'已':''}赞|">赞</b>
+                            (<i style="font-size:12px" th:text="${discussPostLikeNum}">7</i>)
+                        </a>
+                        <a href="#" style="font-size:12px;color:gray">|回复</a>
+                        (<span th:text="${discussPost.commentCount}" style="font-size:12px">14</span>)
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <hr style="border-top:1px solid #eee margin-top:4px margin-bottom:5px;" width="100%" size=1>
+
+    <div class="content" th:text="${discussPost.content}" style="margin-bottom:20px">
+        金三银四的金三已经到了，你还沉浸在过年的喜悦中吗？
+        如果是，那我要让你清醒一下了：目前大部分公司已经开启了内推，正式网申也将在3月份陆续开始，金三银四，春招的求职黄金时期已经来啦！！！
+        再不准备，作为19应届生的你可能就找不到工作了。。。作为20届实习生的你可能就找不到实习了。。。
+        现阶段时间紧，任务重，能做到短时间内快速提升的也就只有算法了，
+        那么算法要怎么复习？重点在哪里？常见笔试面试算法题型和解题思路以及最优代码是怎样的？
+        跟左程云老师学算法，不仅能解决以上所有问题，还能在短时间内得到最大程度的提升！！！
+    </div>
+</div>
+
+<div class="container" style="background:white;width:80%;margin-top:20px">
+    <div class="row">
+        <div style="margin-left:20px;margin-top:20px;padding-bottom:20px;display: inline-block;float:left">
+            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+            &nbsp;<span th:text="${discussPost.commentCount}" style="display: inline-block;font-size:16px">13</span>
+            <span style="display: inline-block;font-size:16px">条回帖</span>
+        </div>
+        <div style="margin-right:10px;margin-top:15px;display: inline-block;float:right">
+            <a href="#replyPost" type="button" class="btn btn-primary btn-sm"> 回 帖 </a>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="background:white;width:80%" >
+    <ul class="media-list" th:each="firstReply:${firstComments}">
+        <li>
+            <!--一级回复-->
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;" th:src="${firstReply.user.headerUrl}" alt="头像">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div class="row">
+                        <div class="col-md-6 text-left" style="padding-left:30px;">
+                            <span  th:text="${firstReply.user.username}" style="color:black">用户一</span>
+                        </div>
+                    </div>
+                    <div th:text="${firstReply.comment.content}" class="content" style="padding-left:16px;padding-top:15px">
+                        赵立坚本周在记者会上说：“我们将视疫情的发展，
+                        在继续做好本国疫情防控的同时，继续与有关方面开展不同形式的合作，
+                        在力所能及的范围内向外方提供支持。”
+                        随着中国境内新增病例数下降、境外新增病例数大涨，
+                        中国现在对境外输入型病例感到担忧，截至4日已确诊20例，包括自意大利和伊朗输入的病例。
+                    </div>
+                    <div class="row">
+                        <div style="margin-left:30px;margin-top:20px;display: inline-block;float:left">
+                            <span th:text="${firstReply.user.username}" style="font-size:13px;color:gray">用户一</span>
+                            <span style="font-size:12px;color:gray">&nbsp;发布于&nbsp;</span>
+                            <span  th:text="${#dates.format(firstReply.comment.createTime,'yyyy-MM-dd HH:mm:ss')}" style="font-size:12px;color:gray">&nbsp;2019-3-12 12:30:12</span>
+                        </div>
+                        <div style="margin-right:20px;margin-top:20px;display: inline-block;float:right;color:gray">
+                            <a herf="javascript:;" th:onclick="|like(this,2,${firstReply.comment.id},${firstReply.comment.userId});|">
+                                <b style="font-size:12px;color:gray" th:text="|${firstReply.likeStatus==1?'已赞':'赞'}|">赞</b>
+                                (<i style="font-size:12px" th:text="${firstReply.likeNum}">7</i>)
+                            </a>
+                            <a href="#firstReply" style="font-size:12px;color:gray">|回复</a>
+<!--                            (<span th:text="${firstReply.comment.commentCount}" style="font-size:12px">14</span>)-->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--    二级回复 -->
+            <div class="media" style="margin-left:72px;background:#eee">
+                <ul class="media-list" th:each="secondReply:${firstReply.secondList}">
+                    <li class="media" style="margin-bottom:-30px">
+                        <div class="media-body">
+                            <div class="row">
+                                <div class="text-left" style="padding-left:30px;padding-top:20px">
+                                    <div th:if="${secondReply.target==null}">
+                                        <span th:text="${secondReply.user.username}"style="color:blue">用户二</span>
+                                        <span >:</span>
+                                    </div>
+
+                                    <div th:if="${secondReply.target!=null}">
+                                        <span th:text="${secondReply.user.username}"style="color:blue">用户二</span>
+                                        <span>&nbsp;回复&nbsp;</span>
+                                        <span th:text="${secondReply.target.username}"style="color:blue">用户三</span>
+                                        <span>:</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="content" th:text="${secondReply.comment.content}" style="margin-left:16px;margin-top:15px;margin-right:5px">
+                                赵立坚本周在记者会上说：“我们将视疫情的发展，
+                                在继续做好本国疫情防控的同时，继续与有关方面开展不同形式的合作，
+                                在力所能及的范围内向外方提供支持。”
+                                随着中国境内新增病例数下降、境外新增病例数大涨，
+                                中国现在对境外输入型病例感到担忧，截至4日已确诊20例，包括自意大利和伊朗输入的病例。
+                            </div>
+                            <div class="row">
+                                <div style="margin-left:30px;margin-top:20px;display: inline-block;float:left">
+                                    <span style="font-size:12px;color:gray">&nbsp;2019-3-12 12:30:12</span>
+                                </div>
+                                <div style="margin-right:25px;margin-top:20px;display: inline-block;float:right;color:gray">
+                                    <a href="javascript:;" th:onclick="|like(this,2,${secondReply.comment.id},${secondReply.comment.userId});|">
+                                        <b style="font-size:12px;color:gray" th:text="|${secondReply.likeStatus==1?'已':''}赞|">赞</b>
+                                        (<i style="font-size:12px" th:text="${secondReply.likeNum}">7</i>)
+                                    </a>
+                                    <a th:href="|#reply-${secondReply.comment.id}|" data-toggle="collapse" style="font-size:12px;color:gray;">|回复</a>
+<!--                                    (<span style="font-size:12px">14</span>)-->
+                                </div>
+                            </div>
+                            <div th:id="|reply-${secondReply.comment.id}|" class="collapse">
+                                <form th:action="@{|/comment/add/${discussPost.id}|}" method="post">
+                                    <div class="form-group">
+                                        <textarea class="form-control" name="content" style="height:40px;margin-left:16px;margin-top:5px;width:97%" rows="10" id="post-content"></textarea>
+                                        <button type="submit" class="btn btn-primary" style="float:right;margin-right:15px;margin-top:5px"data-dismiss="modal">回复
+                                        </button>
+                                        <!--评论二级评论的评论，要加上targetId-->
+                                        <input type="hidden" name="entityId" th:value="${firstReply.comment.id}">
+                                        <input type="hidden" name="entityType" th:value="2">
+                                        <input type="hidden" name="targetId" th:value="${secondReply.user.id}">
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <hr style="border-top:1px solid #D3D3D3 " width="96%" color="#987cb9" size=0.5>
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class="media" id="firstReply" style="margin-left:72px">
+                <form th:action="@{|/comment/add/${discussPost.id}|}" method="post">
+                    <div class="form-group" >
+                        <textarea class="form-control" name="content" style="height:40px;margin-top:10px" rows="10"></textarea>
+                        <button type="submit" class="btn btn-primary" style="float:right;margin-top:10px;margin-bottom:10px"data-dismiss="modal">回复
+                        </button>
+                        <input type="hidden" name="entityId" th:value="${firstReply.comment.id}">
+                        <!--评论一级评论-->
+                        <input type="hidden" name="entityType" th:value="2">
+                    </div>
+                </form>
+            </div>
+
+            <hr style="border-top:1px solid #eee " width="100%" color="#987cb9" size=0.5>
+
+        </li>
+    </ul>
+
+<!--    <nav style="margin-bottom:20px" th:replace="index::pagination"></nav>-->
+    <form id="replyPost" th:action="@{|/comment/add/${discussPost.id}|}" method="post">
+        <div class="form-group">
+            <textarea name="content" class="form-control" style="margin-top:5px;width:100%" rows="10"></textarea>
+            <button type="submit" class="btn btn-primary" style="float:right;margin-top:5px">回复
+            </button>
+            <!--回复的实体类型：类型1：回复帖子-->
+            <input type="hidden" name="entityType" value="1">
+            <input type="hidden" name="entityId" th:value="${discussPost.id}">
+        </div>
+    </form>
+
+
+</div>
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+<!--<script type="text/javascript" th:src="@{/js/like.js}"></script>-->
+<script type="text/javascript" th:src="@{/js/global.js}"></script>
+<script type="text/javascript" th:src="@{/js/post.js}"></script>
+
+</body>
+</html>

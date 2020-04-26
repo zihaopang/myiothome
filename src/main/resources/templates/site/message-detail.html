@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>信息列表</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<header th:replace="index::header">
+</header>
+
+<body style="background:#eee center" >
+    <div class="container" style="width:80%;background:white">
+        <div style="margin:20px">
+            <div >
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                <span style="font-size:20px">来自</span>
+                <span th:text="${user.username}" style="font-size:20px;color:blue">用户一</span>
+                <span style="font-size:20px">的来信</span>
+                <button type="button" class="btn btn-primary" style="float:right;margin: -5px 0px 0px"
+                        data-toggle="modal" data-target="#letterModal">发私信</button>
+            </div>
+        </div>
+
+        <!--发送消息框-->
+        <div class="modal fade" id="letterModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            发送消息
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="send-person">接收人</label>
+                                <input class="form-control" id="send-person" th:value="${user.username}">
+                            </div>
+                            <div class="form-group">
+                                <label for="send-content">内容</label>
+                                <textarea class="form-control" rows="10" id="send-content"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" id="sendBtn" class="btn btn-primary">
+                            发送
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <!--消息提示框-->
+        <div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="hintModalLabel">提示</h5>
+                    </div>
+                    <div class="modal-body" id="hintBody">
+                        发送完成！
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="media-list" th:each="item:${messageList}">
+            <li class="media" >
+                <div class="media-left" >
+                    <a href="#">
+                        <img class="media-object img-circle" style="width:50px;height:50px;margin-top:10px" th:src="${user.headerUrl}" alt="头像">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b th:text="${user.username}" class="panel-title"> 落基山下的闲人</b>
+                            <span th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}" style="float:right">2019.3.10 12:30:23</span>
+                        </div>
+                        <div class="panel-body" th:text="${item.content}">
+                            赵立坚本周在记者会上说：“我们将视疫情的发展，
+                            在继续做好本国疫情防控的同时，继续与有关方面开展不同形式的合作，
+                            在力所能及的范围内向外方提供支持。”
+                            随着中国境内新增病例数下降、境外新增病例数大涨，
+                            中国现在对境外输入型病例感到担忧，截至4日已确诊20例，包括自意大利和伊朗输入的病例。
+                        </div>
+                    </div>
+                </div>
+<!--                <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>-->
+            </li>
+
+        </ul>
+
+        <footer th:replace="index::pagination"></footer>
+    </div>
+
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/global.js}"></script>
+    <script type="text/javascript" th:src="@{/js/message.js}"></script>
+</body>
+</html>

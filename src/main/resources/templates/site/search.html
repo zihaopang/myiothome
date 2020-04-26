@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索结果</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        em {
+        color:red
+        }
+    </style>
+</head>
+
+<header th:replace="index::header">
+
+</header>
+
+<body style="background:#eee">
+
+    <div class="container" style="width:80%;background:white">
+        <div style="padding:10px">
+            <span class="glyphicon glyphicon-search"></span>
+            <span style="font-size:20px;margin-left:8px">搜索结果</span>
+        </div>
+
+        <div class="media-body"  style="padding-top:20px">
+            <ul class="media-list" th:each="item:${result}">
+                <li class="media">
+                    <div class="media-left">
+                        <a th:href="@{|/profile/${item.user.id}|}">
+                            <img class="media-object img-circle" style="width:50px;height:50px;" th:src="${item.user.headerUrl}" alt="头像">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <div class="row">
+                            <div class="col-md-12 text-left" style="padding-left:30px">
+                                <h3 th:href="@{|/discuss/detail/${item.post.id}|}"class="media-heading"
+                                   th:utext="${item.post.title}" style="display: inline-block;font-size:20px">帖子1的标题</h3>
+                            </div>
+                        </div>
+                        <div style="margin-left:14px" th:utext="${item.post.content}">
+                            真采取行动，美国可能会遇到跟意大利类似的局势。
+                        </div>
+                        <div class="row">
+                            <div style="margin-left:30px;margin-top:10px;display: inline-block;float:left">
+                                <span th:text="${item.user.username}" style="font-size:12px;color:gray">牛客扛把子</span>
+                                <span style="font-size:12px;color:gray">&nbsp;发布于&nbsp;</span>
+                                <span th:text="${#dates.format(item.post.createTime,'yyyy-MM-dd HH:mm:ss')}" style="font-size:12px;color:gray">&nbsp;&nbsp;2019-3-12 12:30:12</span>
+                            </div>
+                            <div style="margin-right:20px;margin-top:10px;display: inline-block;float:right">
+                                <span style="font-size:12px;color:gray">赞</span>
+                                &nbsp;<span style="font-size:12px;color:gray" th:text="${item.likeCount}">7</span>&nbsp;&nbsp;
+                                <span style="font-size:12px;color:gray">|&nbsp;&nbsp;&nbsp;回帖</span>
+                                &nbsp;<span th:text="${item.post.commentCount}"style="font-size:12px;color:gray">14</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="border-top:1px solid #eee margin-top:7px" width="100%" size=1>
+                </li>
+
+            </ul>
+        </div>
+
+        <footer th:fragment="pagination">
+            <nav th:if="${page.postsNum>0}" aria-label="Page navigation"  style="text-align:center">
+                <ul class="pagination">
+                    <li>
+                        <a th:href="@{${page.path}(current=1)}" aria-label="Previous">
+                            <span aria-hidden="true">首页</span>
+                        </a>
+                    </li>
+                    <li><a th:href="@{${page.path}(current=${page.current-1})}">上一页</a></li>
+                    <li th:each="i:${#numbers.sequence(page.from,page.to)}" th:class="|${page.current==i?'active':''}|">
+                        <a th:href="@{${page.path}(current=${i})}"
+                           th:text="${i}">1</a>
+                    </li>
+                    <li><a th:href="@{${page.path}(current=${page.current+1})}">下一页</a></li>
+                    <li>
+                        <a th:href="@{${page.path}(current=${page.pagesNum})}" aria-label="Next">
+                            <span aria-hidden="true">末页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </footer>
+    </div>
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
