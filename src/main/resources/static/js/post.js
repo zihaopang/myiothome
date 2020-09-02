@@ -22,7 +22,7 @@ function like(btn,entityType,entityId,postUserId){
 
 function setTop(){
     $.post(
-        "/myiothome/discuss/top",
+         CONTENT_PATH+"/discuss/top",
         {"postId":$("#postId").val()},
         function(data){
             data = $.parseJSON(data);
@@ -37,7 +37,7 @@ function setTop(){
 
 function setWonderful(){
     $.post(
-        "/myiothome/discuss/wonderful",
+       CONTENT_PATH+"/discuss/wonderful",
         {"postId":$("#postId").val()},
         function(data){
             data = $.parseJSON(data);
@@ -52,12 +52,12 @@ function setWonderful(){
 
 function setDeleteBtn(){
     $.post(
-        "/myiothome/discuss/delete",
+        CONTENT_PATH+"/discuss/delete",
         {"postId":$("#postId").val()},
         function(data){
             data = $.parseJSON(data);
             if(data.code == 0){
-                location.href="/myiothome/index";
+                location.href=CONTENT_PATH+"/index";
             }else{
                 alert(data.msg);
             }
