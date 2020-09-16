@@ -27,6 +27,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
     UserService userService;
     @Autowired
     HostHolder hostHolder;
+    //在Controller之前执行
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String ticket = CookieUtil.getCookies(request,"ticket");
@@ -40,13 +41,13 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         user,user.getPassword(),userService.getAuthorities(user.getId())
                 );
-                System.out.println(userService.getAuthorities(user.getId()));
+                //System.out.println(userService.getAuthorities(user.getId()));
                 SecurityContextHolder.setContext(new SecurityContextImpl(authentication));
             }
         }
         return true;
     }
-
+    //在模板之前调用
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         User user = hostHolder.getUser();
@@ -54,7 +55,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
             modelAndView.addObject("loginUser",user);
         }
     }
-
+    //模板执行之后
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         hostHolder.clear();

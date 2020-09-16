@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    List<Comment> selectCommentsByEntityId(int entityType,int entityId,int limit,int offset);
+    List<Comment> selectCommentsByEntityId(int entityType, int entityId, int limit, int offset);
 
     int insertComment(Comment comment);
 

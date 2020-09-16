@@ -12,11 +12,11 @@ public interface MessageMapper {
 
     List<Message> getLatestMessage(int toId, int offset, int limit);
 
-    int unReadCount(int fromId,int toId);
+    int unReadCount(int fromId, int toId);
 
-    List<Message> getAllMessage(int fromId,int toId,int offset,int limit);
+    List<Message> getAllMessage(int fromId, int toId, int offset, int limit);
 
-    int allMessageCount(int fromId,int toId);
+    int allMessageCount(int fromId, int toId);
 
-    int updateStatus(List<Integer> ids,int status);
+    int updateStatus(List<Integer> ids, int status);
 }

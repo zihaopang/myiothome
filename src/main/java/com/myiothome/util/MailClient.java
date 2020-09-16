@@ -21,20 +21,18 @@ public class MailClient {
     @Value("${spring.mail.username}")
     String from;
 
-    public void sendMail(String to,String subject,String content){
+    public void sendMail(String to, String subject, String content) {
 
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper =new MimeMessageHelper(mimeMessage);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
             mimeMessageHelper.setFrom(from);//发送者
             mimeMessageHelper.setTo(to);//接收者
             mimeMessageHelper.setSubject(subject);//主题
-            mimeMessageHelper.setText(content,true);//可以发送html
+            mimeMessageHelper.setText(content, true);//可以发送html
             javaMailSender.send(mimeMessageHelper.getMimeMessage());
-        }catch (MessagingException e){
-            logger.error("发送邮件失败，"+e.getMessage());
+        } catch (MessagingException e) {
+            logger.error("发送邮件失败，" + e.getMessage());
         }
-
-
     }
 }

@@ -11,8 +11,8 @@ public interface MyIotHomeConstent {
     /*
     cookie失效时间
      */
-    int ONE_MONTH = 3600*24*100;
-    int ONE_DAY = 3600*24;
+    int ONE_MONTH = 3600 * 24 * 100;
+    int ONE_DAY = 3600 * 24;
 
     /*
     回复贴的类型
@@ -30,8 +30,8 @@ public interface MyIotHomeConstent {
     /*
     关注的实体类型
      */
-    int POST=1;
-    int USER=3;
+    int POST = 1;
+    int USER = 3;
 
     /*
     主题类型
@@ -39,8 +39,8 @@ public interface MyIotHomeConstent {
     String COMMENT = "comment";
     String LIKE = "like";
     String FOCUS = "focus";
-    String SEARCH="search";
-    String DELETE_POST="deletepost";
+    String SEARCH = "search";
+    String DELETE_POST = "deletepost";
 
     /*
     登陆权限类型

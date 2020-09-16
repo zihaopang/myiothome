@@ -22,7 +22,7 @@ public class Page {
     }
 
     public int getOffset() {
-        return (current-1)*limit;
+        return (current - 1) * limit;
     }
 
     public void setOffset(int offset) {
@@ -34,7 +34,7 @@ public class Page {
     }
 
     public void setCurrent(int current) {
-        if(current > 0) {
+        if (current > 0) {
             this.current = current;
         }
     }
@@ -52,16 +52,16 @@ public class Page {
     }
 
     public void setLimit(int limit) {
-        if(limit > 0 && limit < 30) {
+        if (limit > 0 && limit < 30) {
             this.limit = limit;
         }
     }
 
     public int getPagesNum() {
-        if(postsNum%limit==0)
-            return postsNum/limit;
+        if (postsNum % limit == 0)
+            return postsNum / limit;
         else
-            return postsNum/limit+1;
+            return postsNum / limit + 1;
     }
 
     public void setPagesNum(int pagesNum) {
@@ -69,7 +69,7 @@ public class Page {
     }
 
     public int getFrom() {
-        int num = current-2;
+        int num = current - 2;
         return num < 1 ? 1 : num;
     }
 
@@ -79,9 +79,9 @@ public class Page {
     }
 
     public int getTo() {
-        int num = current+2;
+        int num = current + 2;
         int pageNum = getPagesNum();
-        if(pageNum == 0)
+        if (pageNum == 0)
             return 1;
         return num > pageNum ? pageNum : num;
     }

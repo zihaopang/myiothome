@@ -10,7 +10,6 @@ import com.myiothome.util.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +44,6 @@ public class DiscussPostController implements MyIotHomeConstent {
     @ResponseBody
     public String addDiscussPost(String title,String content){
          User user = hostHolder.getUser();
-         System.out.println(title+content);
          if(user == null){
              return MyIotHomeUtils.getJSONString(403,"您还没有登录!");
          }
@@ -138,10 +136,7 @@ public class DiscussPostController implements MyIotHomeConstent {
                 firstObject.put("secondList",secondList);
 
                 firstList.add(firstObject);
-
-                System.out.println("---------------------------------");
             }
-
         }
 
         model.addAttribute("firstComments",firstList);

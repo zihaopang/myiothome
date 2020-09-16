@@ -20,7 +20,7 @@ function focus(){
         );
     }else{
         $.post(
-            "/myiothome/unfocus",
+             CONTENT_PATH+"/unfocus",
             {"entityType":3,"entityId":$(btn).prev().val()},
             function(data){
                 data = $.parseJSON(data);

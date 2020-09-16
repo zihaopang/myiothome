@@ -8,10 +8,10 @@ public class CheckLoginStatus {
     @Autowired
     HostHolder hostHolder;
 
-    public boolean checkLogin(){
-        if(hostHolder.getUser() != null){
+    public boolean checkLogin() {
+        if (hostHolder.getUser() != null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

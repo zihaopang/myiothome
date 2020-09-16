@@ -18,7 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import javax.xml.crypto.Data;
 import java.util.Date;
 
-public class PostScoreJob implements Job , MyIotHomeConstent {
+public class PostScoreJob implements Job, MyIotHomeConstent {
     @Autowired
     RedisTemplate redisTemplate;
     @Autowired
@@ -38,29 +38,29 @@ public class PostScoreJob implements Job , MyIotHomeConstent {
         String scoreKey = RedisUtils.getSocreKey();
         BoundSetOperations operations = redisTemplate.boundSetOps(scoreKey);//得到一个集合
 
-        if(operations.size() != 0){
+        if (operations.size() != 0) {
             this.refresh((Integer) operations.pop());//每次弹出一个postId进行计算
         }
     }
 
-    private void refresh(int postId){
+    private void refresh(int postId) {
         DiscussPost discussPost = discussPostService.findDiscussPostByPostId(postId);
         Date createTime = discussPost.getCreateTime();
         Date nowTime = new Date();
         //是否为精华
-        int wonderful = discussPost.getType()==1?1:0;
+        int wonderful = discussPost.getType() == 1 ? 1 : 0;
         //点赞数
-        long likeNum = likeService.likeNum(POST,discussPost.getId());
+        long likeNum = likeService.likeNum(POST, discussPost.getId());
         //评论数
         int commentNum = discussPost.getCommentCount();
 
-        double score = Math.log(wonderful+likeNum*2+commentNum*5)/
-                (10+(nowTime.getTime()-discussPost.getCreateTime().getTime())/(1000*60*60*24));
+        double score = Math.log(wonderful + likeNum * 2 + commentNum * 5) /
+                (10 + (nowTime.getTime() - discussPost.getCreateTime().getTime()) / (1000 * 60 * 60 * 24));
 
-        discussPostService.updatePostScore(discussPost.getId(),score);
+        discussPostService.updatePostScore(discussPost.getId(), score);
         //同步到elasticSearch数据库
         Event event = new Event().setEntityId(discussPost.getId())
-                                .setTopic(SEARCH);
+                .setTopic(SEARCH);
         eventProducer.sendEvent(event);
     }
 }

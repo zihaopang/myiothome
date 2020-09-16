@@ -24,7 +24,7 @@ public class QuartzConfig {
      */
     //配置JobDetail，JobDetail:用来描述Job实现类及其它相关的静态信息，如Job名字、关联监听器等信息。
     //@Bean
-    public JobDetailFactoryBean alphaJobDetail(){
+    public JobDetailFactoryBean alphaJobDetail() {
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
         factoryBean.setJobClass(AlphaJob.class);
         factoryBean.setName("alphaJob");
@@ -35,7 +35,7 @@ public class QuartzConfig {
 
     //Trigger：触发器，用于定义任务调度的时间规则
     //@Bean
-    public SimpleTriggerFactoryBean alphaTrigger(JobDetail jobDetail){
+    public SimpleTriggerFactoryBean alphaTrigger(JobDetail jobDetail) {
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setName("alphaTrigger");
@@ -47,7 +47,7 @@ public class QuartzConfig {
     }
 
     @Bean
-    public JobDetailFactoryBean postScoreJobDetail(){
+    public JobDetailFactoryBean postScoreJobDetail() {
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
         factoryBean.setJobClass(PostScoreJob.class);
         factoryBean.setName("postScoreJob");
@@ -57,7 +57,7 @@ public class QuartzConfig {
     }
 
     @Bean
-    public SimpleTriggerFactoryBean postScoreTrigger(JobDetail jobDetail){
+    public SimpleTriggerFactoryBean postScoreTrigger(JobDetail jobDetail) {
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setName("postScoreTrigger");

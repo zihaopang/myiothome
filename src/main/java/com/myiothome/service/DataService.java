@@ -24,13 +24,13 @@ public class DataService {
 
     private SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
-    public void setUv(String ip){
+    public void setUv(String ip) {
         String redisKey = RedisUtils.getUvKey(df.format(new Date()));
-        redisTemplate.opsForHyperLogLog().add(redisKey,ip);
+        redisTemplate.opsForHyperLogLog().add(redisKey, ip);
     }
 
-    public long getUvNum(Date startDate,Date endDate){
-        if(startDate == null || endDate ==  null){
+    public long getUvNum(Date startDate, Date endDate) {
+        if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("参数不能为空！");
         }
 
@@ -39,25 +39,25 @@ public class DataService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
-        while(!calendar.getTime().after(endDate)){
+        while (!calendar.getTime().after(endDate)) {
             String redisKey = RedisUtils.getUvKey(df.format(calendar.getTime()));
             dates.add(redisKey);
-            calendar.add(Calendar.DATE,1);
+            calendar.add(Calendar.DATE, 1);
         }
 
-        String unionKey = RedisUtils.getUvKey(df.format(startDate),df.format(endDate));
-        redisTemplate.opsForHyperLogLog().union(unionKey,dates.toArray());
+        String unionKey = RedisUtils.getUvKey(df.format(startDate), df.format(endDate));
+        redisTemplate.opsForHyperLogLog().union(unionKey, dates.toArray());
 
         return redisTemplate.opsForHyperLogLog().size(unionKey);
     }
 
-    public void setDau(int userId){
+    public void setDau(int userId) {
         String redisKey = RedisUtils.getDauKey(df.format(new Date()));
-        redisTemplate.opsForValue().setBit(redisKey,userId,true);
+        redisTemplate.opsForValue().setBit(redisKey, userId, true);
     }
 
-    public long getDauNum(Date startDate,Date endDate){
-        if(startDate == null || endDate ==  null){
+    public long getDauNum(Date startDate, Date endDate) {
+        if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("参数不能为空！");
         }
 
@@ -66,18 +66,18 @@ public class DataService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
-        while(!calendar.getTime().after(endDate)){
+        while (!calendar.getTime().after(endDate)) {
             String redisKey = RedisUtils.getDauKey(df.format(calendar.getTime()));
             dates.add(redisKey.getBytes());
-            calendar.add(Calendar.DATE,1);
+            calendar.add(Calendar.DATE, 1);
         }
 
-        String unionKey = RedisUtils.getDauKey(df.format(startDate),df.format(endDate));
-        return (long)redisTemplate.execute(new RedisCallback() {
+        String unionKey = RedisUtils.getDauKey(df.format(startDate), df.format(endDate));
+        return (long) redisTemplate.execute(new RedisCallback() {
             @Override
             public Object doInRedis(RedisConnection connection) throws DataAccessException {
                 connection.bitOp(RedisStringCommands.BitOperation.OR,
-                        unionKey.getBytes(),dates.toArray(new byte[0][0]));
+                        unionKey.getBytes(), dates.toArray(new byte[0][0]));
                 return connection.bitCount(unionKey.getBytes());
             }
         });

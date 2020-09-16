@@ -136,7 +136,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>myiothome</finalName>
+		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

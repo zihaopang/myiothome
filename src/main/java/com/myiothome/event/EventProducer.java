@@ -11,7 +11,7 @@ public class EventProducer {
     @Autowired
     KafkaTemplate kafkaTemplate;
 
-    public void sendEvent(Event event){
+    public void sendEvent(Event event) {
         kafkaTemplate.send(event.getTopic(), JSONObject.toJSONString(event));
     }
 

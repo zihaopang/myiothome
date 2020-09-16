@@ -9,7 +9,7 @@ import java.util.List;
 public interface DiscussPostMapper {
     int insertDiscussPost(DiscussPost discussPost);
 
-    List<DiscussPost> selectDiscussPosts(int limit,int offset,int orderMode);
+    List<DiscussPost> selectDiscussPosts(int limit, int offset, int orderMode);
 
     int selectPostsNum();
 
@@ -17,11 +17,11 @@ public interface DiscussPostMapper {
 
     DiscussPost selectDiscussPostByPostId(int postId);
 
-    int updateCommentCount(int postId,int count);
+    int updateCommentCount(int postId, int count);
 
-    int updatePostStatus(int id,int status);
+    int updatePostStatus(int id, int status);
 
-    int updatePostType(int id,int type);
+    int updatePostType(int id, int type);
 
-    int updateScore(int id,double score);
+    int updateScore(int id, double score);
 }

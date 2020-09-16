@@ -35,21 +35,21 @@ public class SearchService {
     @Autowired
     ElasticsearchTemplate elasticsearchTemplate;
 
-    public void deletePost(int postId){
+    public void deletePost(int postId) {
         discussPostRepository.deleteById(postId);
     }
 
-    public void addPost(DiscussPost discussPost){
+    public void addPost(DiscussPost discussPost) {
         discussPostRepository.save(discussPost);
     }
 
-    public Page<DiscussPost> search(String keyWords, int offset, int limit){
+    public Page<DiscussPost> search(String keyWords, int offset, int limit) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.multiMatchQuery(keyWords,"content","title"))
+                .withQuery(QueryBuilders.multiMatchQuery(keyWords, "content", "title"))
                 .withSort(SortBuilders.fieldSort("type").order(SortOrder.DESC))//按照类别，分数，创建时间排序
                 .withSort(SortBuilders.fieldSort("score").order(SortOrder.DESC))
                 .withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
-                .withPageable(PageRequest.of(offset,limit))//一页，十个数据
+                .withPageable(PageRequest.of(offset, limit))//一页，十个数据
                 .withHighlightFields(
                         new HighlightBuilder.Field("title").preTags("<em>").postTags("</em>"),//搜索结果会前后增减em显示红色
                         new HighlightBuilder.Field("content").preTags("<em>").postTags("</em>")
@@ -108,7 +108,7 @@ public class SearchService {
 
             @Override
             public <T> T mapSearchHit(SearchHit searchHit, Class<T> aClass) {
-                return  null;
+                return null;
             }
         });
     }

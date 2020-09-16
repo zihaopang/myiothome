@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.util.Date;
 
 //elasticsearch的设置，索引名称，_doc为类型名，是一个占位符，shards：分片，replicas：备份
-@Document(indexName = "discusspost",type = "_doc",shards = 6,replicas = 3)
+@Document(indexName = "discusspost", type = "_doc", shards = 6, replicas = 3)
 public class DiscussPost {
     @Id
     int id;
@@ -22,10 +22,10 @@ public class DiscussPost {
      * 这五个字拆分成尽可能多的单词：互联、校招、联网、互联网等等
      * searchAnalyzer = "ik_smart"：这是搜索策略，比如互联网校招，他可能只搜索互联网、校招
      */
-    @Field(type = FieldType.Text,analyzer = "ik_max_word",searchAnalyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     String title;
 
-    @Field(type = FieldType.Text,analyzer = "ik_max_word",searchAnalyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     String content;
 
     @Field(type = FieldType.Integer)

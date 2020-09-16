@@ -8,6 +8,6 @@ public class AlphaJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        System.out.println(Thread.currentThread().getName()+" executing...");
+        System.out.println(Thread.currentThread().getName() + " executing...");
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 //继承ElasticsearchRepository，声明搜索的类别和主键类型
 @Repository//注解不是Mapper
-public interface DiscussPostRepository extends ElasticsearchRepository<DiscussPost,Integer> {
+public interface DiscussPostRepository extends ElasticsearchRepository<DiscussPost, Integer> {
 }

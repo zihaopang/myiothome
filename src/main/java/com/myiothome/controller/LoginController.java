@@ -1,7 +1,6 @@
 package com.myiothome.controller;
 
 import com.google.code.kaptcha.Producer;
-import com.myiothome.entity.User;
 import com.myiothome.service.UserService;
 import com.myiothome.util.*;
 import org.apache.commons.lang3.StringUtils;

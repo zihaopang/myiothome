@@ -27,36 +27,36 @@ public class EventConsumer implements MyIotHomeConstent {
     DiscussPostService discussPostService;
 
 
-    @KafkaListener(topics = {COMMENT,LIKE,FOCUS})
-    public void handleEvent(ConsumerRecord record){
-        if(record == null){
+    @KafkaListener(topics = {COMMENT, LIKE, FOCUS})
+    public void handleEvent(ConsumerRecord record) {
+        if (record == null) {
             logger.error("record为空");
             throw new IllegalArgumentException("record为空");
         }
 
-        Event event = JSONObject.parseObject(record.value().toString(),Event.class);
+        Event event = JSONObject.parseObject(record.value().toString(), Event.class);
 
         eventService.insertEvent(event);
     }
 
     @KafkaListener(topics = {SEARCH})
-    public void handlerSearchEvent(ConsumerRecord record){
-        if(record == null){
+    public void handlerSearchEvent(ConsumerRecord record) {
+        if (record == null) {
             logger.error("record为空");
             throw new IllegalArgumentException("record为空");
         }
-        Event event = JSONObject.parseObject(record.value().toString(),Event.class);
+        Event event = JSONObject.parseObject(record.value().toString(), Event.class);
 
         searchService.addPost(discussPostService.findDiscussPostByPostId(event.getEntityId()));
     }
 
     @KafkaListener(topics = {DELETE_POST})
-    public void handlerDeletePostEvent(ConsumerRecord record){
-        if(record == null){
+    public void handlerDeletePostEvent(ConsumerRecord record) {
+        if (record == null) {
             logger.error("record为空");
             throw new IllegalArgumentException("record为空");
         }
-        Event event = JSONObject.parseObject(record.value().toString(),Event.class);
+        Event event = JSONObject.parseObject(record.value().toString(), Event.class);
 
         searchService.deletePost(event.getEntityId());
     }

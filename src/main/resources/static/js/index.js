@@ -33,5 +33,4 @@ function publish() {
             }, 2000);
 	    }
 	);
-
 }

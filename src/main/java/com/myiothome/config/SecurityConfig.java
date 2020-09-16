@@ -48,14 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements MyIo
                         "/discuss/top",
                         "/discuss/wonderful"
                 ).hasAnyAuthority(
-                        AUTHORITY_MODEARTOR
-                ).antMatchers(
-                    "/discuss/delete",
-                    "/data/**",
-                    "/actuator/**"
-                ).hasAnyAuthority(
-                    AUTHORITY_ADMIN
-                )
+                AUTHORITY_MODEARTOR
+        ).antMatchers(
+                "/discuss/delete",
+                "/data/**",
+                "/actuator/**"
+        ).hasAnyAuthority(
+                AUTHORITY_ADMIN
+        )
                 .anyRequest().permitAll()
                 .and().csrf().disable();
 

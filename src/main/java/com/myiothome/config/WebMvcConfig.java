@@ -15,26 +15,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
     //织入两个拦截器
 //    @Autowired
 //    LoginRequiredInterceptor loginRequiredInterceptor;
-   @Autowired
-  LoginTicketInterceptor loginTicketInterceptor;
-   @Autowired
-   DataInterceptor dataInterceptor;
+    @Autowired
+    LoginTicketInterceptor loginTicketInterceptor;
+    @Autowired
+    DataInterceptor dataInterceptor;
 
     /*
     注册要有顺序，先要获取loginTicketInterceptor中的ticket，然后再注册拦截器loginRequiredInterceptor
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-       registry.addInterceptor(loginTicketInterceptor).
-               excludePathPatterns("/**/.css","/**/*.js","/**/*.png","/**/*.jpeg","/**/*.jpg");
+        registry.addInterceptor(loginTicketInterceptor).
+                excludePathPatterns("/**/.css", "/**/*.js", "/**/*.png", "/**/*.jpeg", "/**/*.jpg");
         registry.addInterceptor(dataInterceptor).
-                excludePathPatterns("/**/.css","/**/*.js","/**/*.png","/**/*.jpeg","/**/*.jpg");
+                excludePathPatterns("/**/.css", "/**/*.js", "/**/*.png", "/**/*.jpeg", "/**/*.jpg");
 //        registry.addInterceptor(loginRequiredInterceptor).
 //                excludePathPatterns("/**/.css","/**/*.js","/**/*.png","/**/*.jpeg","/**/*.jpg");
     }
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/image/**").addResourceLocations("file:D:\\work\\data\\upload");
-//    }
 }
